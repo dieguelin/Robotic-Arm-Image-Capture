@@ -1,35 +1,42 @@
 import RPi.GPIO as gpio
 from motor_module.motorclass import MotorInstance
 from time import sleep
-import time
 import picamera
 from pathlib import Path
 import threading
 
 def motor_control(stop_event):
     """Motor control function to run in a separate thread"""
-    basemotor = MotorInstance(kp=4.5)
-    arm = MotorInstance(kp=1.1, kd=0.1, ki=0, PIN_PWM=27, PIN_OUT1=5, PIN_OUT2=6,
-                       PIN_IN1=16, PIN_IN2=19,margin = 7)
+    basemotor = MotorInstance(kp = 6.5)
+    arm = MotorInstance(kp = 1.1,kd = 0.08,ki = 0,PIN_PWM = 27,PIN_OUT1 = 5, PIN_OUT2 = 6,
+                     PIN_IN1 = 16, PIN_IN2 = 19)
 
-    print("Starting motor movements...")
-
-    # Execute the motor movement sequence
+    print('starting motor movements ...')
+    # Execute the motormovement sequence
     for i in range(5):
-        print(f"Motor sequence {i+1}/5")
-        arm.move(1410)
-        basemotor.move(-45)
-        arm.move(-1410)
-        basemotor.move(-45)
+        print(f'Motor sequence {i+1}')
+        arm.move(1300)
+        basemotor.move(-50)
+        #sleep(0.1)
+        arm.move(-1220)
+        basemotor.move(-50)
 
-    basemotor.move(450)
-    print("Motor movements completed!")
+    arm.move(-500)
+    for i in range(15):
+        arm.move(1500)
+        basemotor.move(-50)
+        arm.move(-1420)
+        basemotor.move(-50)
 
-        # Signal the camera thread to stop
+    arm.move(500)
+    basemotor.move(2000)
+
+    print("Motor Movements completed! ")
+    # Signal the camera thread to stop
     stop_event.set()
     # Cleanup GPIO
     gpio.cleanup()
-
+    
 def camera_capture(stop_event, object_name):
     """Camera capture function to run in a separate thread"""
     # Create images directory using pathlib
@@ -53,7 +60,7 @@ def camera_capture(stop_event, object_name):
             camera.capture(str(filename))
             print(f"Captured: {filename}")
             counter += 1
-            time.sleep(0.1)  # Small delay between captures
+            sleep(0.1)  # Small delay between captures
 
         camera.stop_preview()
         print(f"Camera capture completed! Total images captured: {counter}")
