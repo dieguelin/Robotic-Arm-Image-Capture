@@ -3,7 +3,7 @@ This is the code for a 2 DOF robotic system that repositions a Raspberry Pi Came
 
 # Introduction
 
-This repository is a thesis work of a robotic system. The system uses a python DC motor control library (documentation can be found in the following repository: https://github.com/dieguelin/Python-DC-Motor-Control-Library-for-Raspberry-Pi ) to control the position of the raspberry pi camera using two DC motors. The code executes a series of camera repositions while simultaneously taking image captures. The exposure time of the camera was reduced to avoid blurry images.
+This repository is a thesis work for robotic system. The system uses a python DC motor control library (documentation can be found in the following repository: https://github.com/dieguelin/Python-DC-Motor-Control-Library-for-Raspberry-Pi ) to control the position of the raspberry pi camera using two DC motors. The code executes a series of camera repositions while simultaneously taking image captures. The exposure time of the camera was reduced to avoid blurry images.
 
 # Getting started
 
@@ -18,4 +18,4 @@ WARNING: Please be careful in choosing the correct GPIO pins. The code won't con
 
 # main.py 
 
-The main.py file uses threads to simultaneosly reposition the motor while taking image captures. Threads allow communication between them. Then motor movements are culminated, a signal is sent to the image thread to terminate image captures. The entire process is culminated once both threads finish running.
+The main.py file uses threads to simultaneosly reposition the motor while taking image captures. Threads allow communication between them. This property is exploited to terminate camera operation once the robot is done with all movements.
